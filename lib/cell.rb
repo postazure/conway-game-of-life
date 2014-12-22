@@ -21,9 +21,12 @@ class Cell
     if self.living
       if living_neighbors.count < 2
         self.death
+      elsif living_neighbors.count > 3
+        self.death
+
       end
 
-      
+
     else
 
     end
