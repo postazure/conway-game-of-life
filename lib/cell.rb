@@ -16,15 +16,15 @@ class Cell
   end
 
   def new_generation(neighbors)
-    living_neighbors = neighbors.select {|x| x.living == true}
-    
-    if self.living == true
+    living_neighbors = neighbors.map {|x| x.living == true}
+
+    if self.living
       if living_neighbors.count < 2
         self.death
       elsif living_neighbors.count > 3
         self.death
       end
-    elsif self.living == false
+    else
       if living_neighbors.count == 3
         self.birth
       end
