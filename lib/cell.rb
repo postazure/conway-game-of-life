@@ -17,18 +17,17 @@ class Cell
 
   def new_generation(neighbors)
     living_neighbors = neighbors.select {|x| x.living == true}
-    # dead_neighbors = neighbors.select {|x| x.living == false}
-    if self.living
+    
+    if self.living == true
       if living_neighbors.count < 2
         self.death
       elsif living_neighbors.count > 3
         self.death
-
       end
-
-
-    else
-
+    elsif self.living == false
+      if living_neighbors.count == 3
+        self.birth
+      end
     end
   end
 end
