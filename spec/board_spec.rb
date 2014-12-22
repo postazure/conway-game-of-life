@@ -56,6 +56,30 @@ describe Board do
       ])
     end
 
+    it "is in the corner (with negatives)" do
+      test_board = Board.new(10)
+      test_board.create_grid(Cell)
+      neighboring_cells = test_board.neighbors_coords([0,0])
+      expect(neighboring_cells).to eq(
+      [
+              [0,1],
+        [1,0],[1,1],
+      ])
+
+    end
+
+    it "is in the corner (with negatives)" do
+      test_board = Board.new(3)
+      test_board.create_grid(Cell)
+      neighboring_cells = test_board.neighbors_coords([2,2])
+      expect(neighboring_cells).to eq(
+      [
+        [1,1],[1,2],
+        [2,1],
+        ])
+
+    end
+
     it "can return the neighbor cells of particular cell" do
       test_board = Board.new(3)
       test_board.create_grid(Cell)
@@ -63,11 +87,11 @@ describe Board do
       test_board.cell([0,1]).death
 
       neighboring_cells = test_board.neighbors([1,1])
-      
+
       expect(neighboring_cells.first.living).to be false
       expect(neighboring_cells[1].living).to be false
       expect(neighboring_cells[2].living).to be true
       expect(neighboring_cells.last.living).to be true
-      end
+    end
   end
 end
