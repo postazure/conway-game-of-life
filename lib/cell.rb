@@ -3,14 +3,6 @@ class Cell
     @living = living
   end
 
-  def birth
-    @living = true
-  end
-
-  def death
-    @living = false
-  end
-
   def living
     @living
   end
@@ -20,13 +12,13 @@ class Cell
 
     if self.living
       if living_neighbors.count < 2
-        self.death
+        return Cell.new(false)
       elsif living_neighbors.count > 3
-        self.death
+        return Cell.new(false)
       end
     else
       if living_neighbors.count == 3
-        self.birth
+        return Cell.new(true)
       end
     end
   end

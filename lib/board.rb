@@ -3,13 +3,18 @@ class Board
     @size = size
   end
 
-  def create_grid(cell)
+  def genesis_grid(cell)
     grid = Array.new(@size) {Array.new(@size)}
     @grid = grid.map do |row|
       row.map do |slot|
-        slot = cell.new(true) #need to pass in 'new' instead of having this here
+        slot = cell.new(false) #need to pass in 'new' instead of having this here
       end
     end
+  end
+
+  def seed_grid(coords)
+    x,y=coords
+    @grid[x][y] = Cell.new(true)
   end
 
   def grid
@@ -50,5 +55,19 @@ class Board
     neighbors_coords(cell_coords).map do |neighbor|
       cell(neighbor)
     end
+  end
+
+  def next_gen_board
+    grid = @grid.clone
+
+    new_grid = grid.each_with_index.map do |row, x|
+      row.each_with_index.map do |slot, y|
+        coords = [x,y]
+        neighbors = self.neighbors(coords)
+        cell = self.cell(coords)
+        slot = cell.new_generation(neighbors)
+      end
+    end
+    @grid = new_grid
   end
 end
