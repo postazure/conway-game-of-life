@@ -31,7 +31,7 @@ board = Board.new(44)
 board.genesis_grid(Cell)
 generate_seeds(6, board)
 print_generation(board)
-time_to_run.times do |i|
+times_to_run.times do |i|
   puts "#{i} Generations \n#{"%"*board.grid.size}"
   board.next_gen_board
   print_generation(board)
