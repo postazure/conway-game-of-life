@@ -1,4 +1,5 @@
 class Board
+  attr_reader :grid
   def initialize(size)
     @size = size
   end
@@ -7,35 +8,43 @@ class Board
     grid = Array.new(@size) {Array.new(@size)}
     @grid = grid.map do |row|
       row.map do |slot|
-        slot = cell.new(false) #need to pass in 'new' instead of having this here
+        slot = cell.new(false)
       end
     end
   end
 
-  def seed_grid(coords)
-    x,y=coords
-    @grid[x][y] = Cell.new(true)
+  def next_gen_board
+    @grid = @grid.each_with_index.map do |row, x|
+      row.each_with_index.map do |slot, y|
+        neighbors = self.neighbors([x,y])
+        cell = self.cell([x,y])
+        slot = cell.new_generation(neighbors)
+      end
+    end
   end
 
-  def grid
-    @grid
+  def seed_grid(i)
+    grid[i.first][i.last] = Cell.new(true)
   end
 
-  def cell(coords)
-    x, y = coords
-    @grid[x][y]
+  def cell(i)
+    grid[i.first][i.last]
+  end
+
+  def neighbors(cell_coords)
+    neighbors_coords(cell_coords).map do |neighbor|
+      cell(neighbor)
+    end
   end
 
   def neighbors_coords(cell_coords)
     row, col = cell_coords
 
-    neighbors_arrays = [
+    prevent_board_wrap([
       [row - 1, col - 1],[row - 1, col],[row - 1, col + 1],
       [row, col - 1],                   [row, col + 1],
       [row + 1, col - 1],[row + 1, col],[row + 1, col + 1],
-    ]
-
-    prevent_board_wrap(neighbors_arrays)
+    ])
   end
 
   def prevent_board_wrap(neighbors_arrays)
@@ -47,27 +56,6 @@ class Board
         end
       end
     end
-
     return_array
-  end
-
-  def neighbors(cell_coords)
-    neighbors_coords(cell_coords).map do |neighbor|
-      cell(neighbor)
-    end
-  end
-
-  def next_gen_board
-    grid = @grid.clone
-
-    new_grid = grid.each_with_index.map do |row, x|
-      row.each_with_index.map do |slot, y|
-        coords = [x,y]
-        neighbors = self.neighbors(coords)
-        cell = self.cell(coords)
-        slot = cell.new_generation(neighbors)
-      end
-    end
-    @grid = new_grid
   end
 end
